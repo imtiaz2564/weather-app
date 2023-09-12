@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Weather App</title>
+</head>
+<body>
+    <h1>Random Weather Information</h1>
+    <div id="weather"></div>
+    
+    <script>
+        async function fetchWeather() {
+            const response = await fetch('/weather');
+            const data = await response.json();
+            const weatherDiv = document.getElementById('weather');
+            weatherDiv.innerHTML = `<p>Temperature: ${data.temperature}°C</p><p>Condition: ${data.condition}</p>`;
+        }
+
+        fetchWeather();
+    </script>
+</body>
+</html>
