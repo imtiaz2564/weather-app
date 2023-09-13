@@ -25,8 +25,13 @@ jobs:
           DOCKER_CLI_ACI: 1
           
       - name: Login to DigitalOcean Container Registry
-        run: echo ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} | docker login -u ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin registry.digitalocean.com
-
+        run: |
+          mkdir -p $HOME/.docker
+          echo '{"auths":{"registry.digitalocean.com":{"username":"your-digitalocean-username","password":"your-digitalocean-access-token","auth":"'"$(echo -n your-digitalocean-username:your-digitalocean-access-token | base64)"'"}}}' > $HOME/.docker/config.json
+        env:
+          DOCKER_CONFIG: $HOME/.docker
+      
+        
       - name: Push image to DigitalOcean Container Registry
         run: docker push registry.digitalocean.com/your-digitalocean-username/weatherapp:latest
         env:
