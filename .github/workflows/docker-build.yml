@@ -24,7 +24,7 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: |
           docker build -t weatherapp:latest .
-          docker tag weatherapp:latest registry.digitalocean.com/digitalocean_registry_username/weatherapp/weatherapp:latest
+          docker tag weatherapp:latest registry.digitalocean.com/secrets.digitalocean_registry_username/weatherapp/weatherapp:latest
           docker push registry.digitalocean.com/secrets.digitalocean_registry_username/weatherapp:latest
         env:
           DOCKER_CLI_ACI: 1
