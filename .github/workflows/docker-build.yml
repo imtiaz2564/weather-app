@@ -1,0 +1,25 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main  # Replace with your main branch name
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.imtiaz2564 }} -p ${{ secrets.Im825795@+ }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t weatherapp:latest .
+          docker tag weatherapp:latest imtiaz2564/weatherapp:latest
+          docker push imtiaz2564/weatherapp:latest
+        env:
+          DOCKER_CLI_ACI: 1
