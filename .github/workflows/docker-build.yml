@@ -12,17 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Build and push Docker image
-        run: |
-          docker build -t weatherapp:latest .
-          docker tag weatherapp:latest imtiaz2564/weatherapp:latest
-          docker push imtiaz2564/weatherapp:latest
-        env:
-          DOCKER_CLI_ACI: 1
           
       - name: Login to DigitalOcean Container Registry
         run: |
@@ -36,6 +25,6 @@ jobs:
         run: |
           docker build -t weatherapp:latest .
           docker tag weatherapp:latest registry.digitalocean.com/DIGITALOCEAN_REGISTRY_USERNAME/weatherapp:latest
-          docker push registry.digitalocean.com/DIGITALOCEAN_REGISTRY_USERNAME/weatherapp:latest
+          docker push registry.digitalocean.com/imtiazaiub1@gmail.com/weatherapp:latest
         env:
           DOCKER_CLI_ACI: 1
