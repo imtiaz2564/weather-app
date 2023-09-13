@@ -13,18 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
           
-      - name: Login to DigitalOcean Container Registry
-        run: |
-          mkdir -p $HOME/.docker
-          echo '{"auths":{"registry.digitalocean.com":{"username":secrets.DIGITALOCEAN_REGISTRY_USERNAME,"password":secrets.DIGITALOCEAN_ACCESS_TOKEN,"auth":"'"$(echo -n DIGITALOCEAN_REGISTRY_USERNAME:DIGITALOCEAN_ACCESS_TOKEN | base64)"'"}}}' > $HOME/.docker/config.json
-        env:
-          DOCKER_CONFIG: $HOME/.docker
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       
-        
+      # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
+      - name: Build container image
+        run: docker build -t ${{ secrets.REGISTRY_NAME }}/python-example:$(echo $GITHUB_SHA | head -c7) .
+  
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 1200
+  
       - name: Push image to DigitalOcean Container Registry
-        run: |
-          docker build -t weatherapplication:latest .
-          docker tag weatherapplication:latest registry.digitalocean.com/weatherregistery/weatherapplication:latest
-          docker push registry.digitalocean.com/weatherregistery/weatherapplication:latest
-        env:
-          DOCKER_CLI_ACI: 1
+        run: docker push ${{ secrets.REGISTRY_NAME }}/python-example:$(echo $GITHUB_SHA | head -c7)
+
