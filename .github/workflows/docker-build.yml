@@ -17,6 +17,9 @@ jobs:
         run: |
           mkdir -p $HOME/.docker
           echo '{"auths":{"registry.digitalocean.com":{"username":secrets.DIGITALOCEAN_REGISTRY_USERNAME,"password":secrets.DIGITALOCEAN_ACCESS_TOKEN,"auth":"'"$(echo -n DIGITALOCEAN_REGISTRY_USERNAME:DIGITALOCEAN_ACCESS_TOKEN | base64)"'"}}}' > $HOME/.docker/config.json
+          docker build -t weatherapp:latest .
+          docker tag weatherapp:latest registry.digitalocean.com/weatherapp:latest
+          docker push registry.digitalocean.com/weatherapp:latest
         env:
           DOCKER_CONFIG: $HOME/.docker
       
