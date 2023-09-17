@@ -22,18 +22,22 @@ jobs:
       - name: Build backend container image
         run: |
          cd backend 
-         docker build -t registry.digitalocean.com/weatherregistery/weatherapp:$(echo $GITHUB_SHA | head -c7) .
+         docker build -t registry.digitalocean.com/weatherregistery/backend:$(echo $GITHUB_SHA | head -c7) .
   
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
   
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/weatherregistery/weatherapp:$(echo $GITHUB_SHA | head -c7)
+        run: docker push registry.digitalocean.com/weatherregistery/backend:$(echo $GITHUB_SHA | head -c7)
 
       - name: Build frontend container image
         run: |
           cd frontend 
-          docker build -t registry.digitalocean.com/weatherregistery/weatherappfrontend:$(echo $GITHUB_SHA | head -c7) .
+          docker build -t registry.digitalocean.com/weatherregistery/frontend:$(echo $GITHUB_SHA | head -c7) .
+     
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push registry.digitalocean.com/weatherregistery/frontend:$(echo $GITHUB_SHA | head -c7)
+
   
       
 
