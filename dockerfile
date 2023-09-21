@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your Nest.js application is running on
-EXPOSE 3000
+EXPOSE 4000
 
 # Command to start your application
 CMD [ "npm", "start" ]
