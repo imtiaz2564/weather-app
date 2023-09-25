@@ -17,6 +17,22 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: List changed files
+        id: file-changes
+        run: |
+          echo "Changed files:"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+        continue-on-error: true  # Continue even if there are no changes
+
+      - name: Check for specific file changes
+        run: |
+          if grep -q 'my_file_to_check' ${{ steps.file-changes.outputs.stdout }}; then
+            echo "The specified file has changed."
+            # Add your actions or commands here for further processing
+          else
+            echo "The specified file has not changed."
+          fi    
       
       # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
       - name: Build container image
