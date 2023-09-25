@@ -17,22 +17,19 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v39
+        
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
+        # with:
+        #   since_last_remote_commit: true 
 
-      - name: List changed files
-        id: file-changes
+      - name: List all changed files
         run: |
-          echo "Changed files:"
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
-        continue-on-error: true  # Continue even if there are no changes
-
-      - name: Check for specific file changes
-        run: |
-          if grep -q 'my_file_to_check' ${{ steps.file-changes.outputs.stdout }}; then
-            echo "The specified file has changed."
-            # Add your actions or commands here for further processing
-          else
-            echo "The specified file has not changed."
-          fi    
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
       
       # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
       - name: Build container image
